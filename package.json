@@ -9,8 +9,8 @@
     "build": "tsc -p tsconfig.json --outDir out",
     "dev": "nodemon --watch src --ext ts --exec \"ts-node src/index.ts\"",
     "lint": "eslint . --ext .ts",
-    "create-image": "docker build -t image .",
-    "create-container": "docker run -d --name container -p 3001:3000 image"
+    "create-image:prod": "docker build --target prod -t example-user-auth-backend__prod .",
+    "create-container:prod": "docker run -d --name user-auth__backend__prod -p 3001:3000 example-user-auth-backend__prod"
   },
   "keywords": [],
   "author": "@felipe-sant",
