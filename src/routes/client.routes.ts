@@ -5,7 +5,7 @@ class ClientRoutes {
     private clientController = new ClientController()
     private router: Router = Router()
 
-    private url: string = "/"
+    private url: string = ""
 
     constructor() {
         this.router.get(
@@ -27,7 +27,7 @@ class ClientRoutes {
 
         this.router.post(
             this.url + "/register",
-            this.clientController.login.bind(this.clientController)
+            this.clientController.register.bind(this.clientController)
         )
 
         this.router.propfind(
