@@ -21,10 +21,19 @@ class ClientRepository {
         return newClient
     }
 
-    public async getClient(id: number): Promise<ClientType> {
-        const query = "SELECT (id, username, email, name) FROM client WHERE id = $1"
-        const res = await db.query(query, [id])
+    public async getClient(id: number): Promise<ClientType | undefined> {
+        const query = "SELECT id, username, email, name FROM client WHERE id = $1"
+        const res = await db.query<ClientType>(query, [id])
         return res.rows[0]
+    }
+
+    public async getId(username: string): Promise<number | undefined> {
+        const query = "SELECT id FROM client WHERE username = $1"
+        const res = (await db.query<{ id: number }>(query, [username]))
+        if (res.rowCount && res.rowCount > 0)
+            return res.rows[0].id
+        else
+            return undefined
     }
 }
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ClientController from "../controllers/client.controller";
+import requireAuthMiddleware from "../middleware/requireAuth.middleware";
 
 class ClientRoutes {
     private clientController = new ClientController()
@@ -10,7 +11,7 @@ class ClientRoutes {
     constructor() {
         this.router.get(
             this.url,
-            // need middleware logged
+            requireAuthMiddleware,
             this.clientController.getInfo.bind(this.clientController)
         )
 
@@ -21,7 +22,7 @@ class ClientRoutes {
 
         this.router.post(
             this.url + "/logout",
-            // need middleware logged
+            requireAuthMiddleware,
             this.clientController.logout.bind(this.clientController)
         )
 
