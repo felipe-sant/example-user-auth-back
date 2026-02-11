@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import ClientController from "../controllers/client.controller";
 import requireAuthMiddleware from "../middleware/requireAuth.middleware";
 
@@ -24,6 +24,12 @@ class ClientRoutes {
             this.url + "/logout",
             requireAuthMiddleware,
             this.clientController.logout.bind(this.clientController)
+        )
+
+        this.router.get(
+            this.url + "/login",
+            requireAuthMiddleware,
+            (_: Request, res: Response) => { res.status(200).json({ message: "User is logged" }) }
         )
 
         this.router.post(
