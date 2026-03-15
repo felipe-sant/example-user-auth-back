@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import ClientService from "../services/client.service";
 import JWT from "../utils/jwt";
 import { AuthRequest } from "../middleware/requireAuth.middleware";
+import { ClientType_update_info } from "../repositories/client.repository";
+import getProperty from "../utils/getProperty";
 
 class ClientController {
     private clientService = new ClientService()
@@ -13,6 +15,27 @@ class ClientController {
             const user = await this.clientService.getAccount(id)
 
             res.status(200).json(user)
+        } catch (error: unknown) {
+            console.error("Error:", error)
+            res.sendStatus(500)
+        }
+    }
+
+    public async updateInfo(req: AuthRequest, res: Response): Promise<void> {
+        try {
+            const { id } = req.user
+            
+            const updateValid: (keyof ClientType_update_info)[] = ["name", "email", "dateofbirth"]
+            let client: Partial<ClientType_update_info> = {}
+            
+            updateValid.forEach(key => {
+                const prop = getProperty(req.body, key)
+                if (prop) client[key] = prop
+            })
+
+            const user = await this.clientService.updateAccount(id, client)
+
+            res.status(200).send({ message: "Cliente atualizado com sucesso!", user: user})
         } catch (error: unknown) {
             console.error("Error:", error)
             res.sendStatus(500)

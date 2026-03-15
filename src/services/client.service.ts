@@ -1,5 +1,5 @@
 import AuthRepository from "../repositories/auth.repository";
-import ClientRepository, { ClientType, ClientType_send } from "../repositories/client.repository";
+import ClientRepository, { ClientType, ClientType_send, ClientType_update_info } from "../repositories/client.repository";
 import bcrypt from "bcrypt"
 
 class ClientService {
@@ -9,6 +9,12 @@ class ClientService {
     async getAccount(id: number): Promise<ClientType | undefined> {
         const user = await this.clientRepository.getClient(id)
         return user
+    }
+
+    async updateAccount(id: number, client: Partial<ClientType_update_info>): Promise<ClientType | undefined> {
+        await this.clientRepository.updateClient(id, client)
+
+        return await this.clientRepository.getClient(id)
     }
 
     async clientExists(username: string): Promise<boolean> {

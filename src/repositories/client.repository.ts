@@ -9,7 +9,13 @@ export type ClientType = {
 
 export type ClientType_send = {
     username: string
+    email?: string,
+}
+
+export type ClientType_update_info = {
     email?: string
+    name?: string,
+    dateofbirth?: Date
 }
 
 class ClientRepository {
@@ -22,7 +28,7 @@ class ClientRepository {
     }
 
     public async getClient(id: number): Promise<ClientType | undefined> {
-        const query = "SELECT id, username, email, name FROM client WHERE id = $1"
+        const query = "SELECT id, username, email, name, dateofbirth FROM client WHERE id = $1"
         const res = await db.query<ClientType>(query, [id])
         return res.rows[0]
     }
@@ -34,6 +40,18 @@ class ClientRepository {
             return res.rows[0].id
         else
             return undefined
+    }
+
+    public async updateClient(id: number, client: Partial<ClientType_update_info>): Promise<void> {
+        const keys = Object.keys(client) as (keyof typeof client)[]
+        if (keys.length === 0) return
+
+        const sets = keys.map((key, index) => `${key} = $${index + 1}`)
+        const values = keys.map(key => client[key])
+
+        const query = `UPDATE client SET ${sets.join(", ")} WHERE id = $${keys.length + 1}`
+
+        await db.query(query, [...values, id])
     }
 }
 

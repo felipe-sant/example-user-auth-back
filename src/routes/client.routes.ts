@@ -15,6 +15,12 @@ class ClientRoutes {
             this.clientController.getInfo.bind(this.clientController)
         )
 
+        this.router.put(
+            this.url,
+            requireAuthMiddleware,
+            this.clientController.updateInfo.bind(this.clientController)
+        )
+
         this.router.post(
             this.url + "/login",
             this.clientController.login.bind(this.clientController)
