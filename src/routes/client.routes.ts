@@ -37,8 +37,8 @@ class ClientRoutes {
             this.clientController.register.bind(this.clientController)
         )
 
-        this.router.propfind(
-            this.url,
+        this.router.get(
+            this.url + "/test",
             this.clientController.__test__.bind(this.clientController)
         )
     }
